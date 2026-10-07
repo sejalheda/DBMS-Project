@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CivicConnect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="brand-container">
+        <a href="/" class="logo">
+            🏛 Civic<span>Connect</span>
+        </a>
+        <span class="brand-tagline">Smart Public Grievance Tracking System</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/admin_logout" class="active">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="dashboard-header">
+        <div>
+            <h1>🏛 Administrator Dashboard</h1>
+            <p>Complete Public Grievance Management System</p>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+            <a href="/" class="btn btn-secondary">
+                ← Home
+            </a>
+            <a href="/admin_logout" class="btn btn-danger">
+                Logout
+            </a>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-header">
+            <h2>Grievance Registry</h2>
+            <p>Full list of registered complaints and status controls</p>
+        </div>
+
+        {% if complaints %}
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Citizen</th>
+                        <th>Email</th>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Department</th>
+                        <th>Priority</th>
+                        <th>Duplicate Count</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {% for complaint in complaints %}
+                    <tr>
+                        <td>
+                            <strong>#{{ complaint[0] }}</strong>
+                        </td>
+
+                        <td>
+                            <strong>{{ complaint[1] or "N/A" }}</strong>
+                        </td>
+
+                        <td>
+                            <small style="color: var(--text-muted);">
+                                {{ complaint[2] or "N/A" }}
+                            </small>
+                        </td>
+
+                        <td>
+                            <strong>{{ complaint[3] }}</strong>
+                        </td>
+
+                        <td style="max-width: 240px;">
+                            {{ complaint[4] }}
+                        </td>
+
+                        <td>
+                            {{ complaint[5] or "N/A" }}
+                            {% if complaint[6] %}
+                                <br>
+                                <small style="color: var(--text-muted);">
+                                    📍 {{ complaint[6] }}
+                                </small>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ complaint[7] or "N/A" }}
+                        </td>
+
+                        <td>
+                            {% if complaint[8] >= 10 %}
+                                <span class="badge badge-critical">
+                                    🔴 {{ complaint[8] }} - Critical
+                                </span>
+                            {% elif complaint[8] >= 8 %}
+                                <span class="badge badge-high">
+                                    🟠 {{ complaint[8] }} - High
+                                </span>
+                            {% elif complaint[8] >= 5 %}
+                                <span class="badge badge-medium">
+                                    🟡 {{ complaint[8] }} - Medium
+                                </span>
+                            {% else %}
+                                <span class="badge badge-low">
+                                    🟢 {{ complaint[8] }} - Low
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td style="text-align: center;">
+                            <span class="badge badge-review">
+                                {{ complaint[9] }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <form
+                                method="POST"
+                                action="/update_status/{{ complaint[0] }}"
+                                class="status-form">
+
+                                <select name="status_id">
+                                    {% for status in statuses %}
+                                        <option
+                                            value="{{ status[0] }}"
+                                            {% if status[1] == complaint[10] %}
+                                                selected
+                                            {% endif %}>
+                                            {{ status[1] }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    Update
+                                </button>
+                            </form>
+                        </td>
+
+                        <td style="white-space: nowrap; font-size: 13px; color: var(--text-muted);">
+                            {{ complaint[11] }}
+                        </td>
+
+                        <td style="font-family: monospace; font-size: 13px; color: var(--text-muted);">
+                            {% if complaint[12] is not none %}
+                                {{ "%.6f"|format(complaint[12]|float) }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+
+                        <td style="font-family: monospace; font-size: 13px; color: var(--text-muted);">
+                            {% if complaint[13] is not none %}
+                                {{ "%.6f"|format(complaint[13]|float) }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">📭</div>
+                <h2>No complaints registered</h2>
+                <p>There are currently no complaints in the system.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<footer class="footer">
+    <p>
+        <strong>CivicConnect</strong> — Admin Management System
+    </p>
+</footer>
+
+</body>
+</html>

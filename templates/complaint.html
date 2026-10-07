@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Complaint - CivicConnect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="brand-container">
+        <a href="{{ url_for('index') }}" class="logo">
+            🏛 Civic<span>Connect</span>
+        </a>
+        <span class="brand-tagline">Smart Public Grievance Tracking System</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="{{ url_for('index') }}">Home</a>
+
+        {% if session.get('citizen_id') %}
+            <a href="{{ url_for('citizen_home') }}">Dashboard</a>
+            <a href="{{ url_for('my_complaints') }}">My Complaints</a>
+            <a href="{{ url_for('citizen_logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('citizen_login') }}">Citizen Login</a>
+        {% endif %}
+    </div>
+</nav>
+
+<div class="small-container">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="form-card">
+
+        <h1>📝 Register a Complaint</h1>
+        <p class="subtitle">
+            Submit a civic issue and help your local authority resolve it efficiently.
+        </p>
+
+        <form method="POST"
+              action="{{ url_for('complaint') }}"
+              id="complaintForm">
+
+            <!-- SECTION 1: COMPLAINT INFORMATION -->
+            <div class="form-section">
+                <div class="section-title">
+                    📂 1. Complaint Information
+                </div>
+
+                <div class="form-group">
+                    <label for="category_id">Complaint Category</label>
+                    <select
+                        name="category_id"
+                        id="category_id"
+                        required
+                        onchange="updateDepartment()">
+
+                        <option value="">
+                            Select complaint category
+                        </option>
+
+                        {% for category in categories %}
+                            <option
+                                value="{{ category[0] }}"
+                                data-department="{{ category[0] }}">
+
+                                {{ category[1] }}
+                                {% if category[2] %}
+                                    — Base Priority {{ category[2] }}
+                                {% endif %}
+
+                            </option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="department_preview">Responsible Department</label>
+                    <input
+                        type="text"
+                        id="department_preview"
+                        value=""
+                        placeholder="Department will be selected automatically"
+                        readonly>
+                    <small>
+                        Department is assigned automatically according to the selected category.
+                    </small>
+                </div>
+            </div>
+
+
+            <!-- SECTION 2: ISSUE DETAILS -->
+            <div class="form-section">
+                <div class="section-title">
+                    ✏️ 2. Issue Description
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Complaint Description</label>
+                    <textarea
+                        name="description"
+                        id="description"
+                        maxlength="1000"
+                        required
+                        placeholder="Describe the problem clearly (e.g. location details, severity, duration)..."></textarea>
+                    <small>
+                        <span id="charCount">0</span>/1000 characters
+                    </small>
+                </div>
+            </div>
+
+
+            <!-- SECTION 3: LOCATION INFORMATION -->
+            <div class="form-section">
+                <div class="section-title">
+                    📍 3. Location Information
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address / Landmark</label>
+                    <input
+                        type="text"
+                        name="address"
+                        id="address"
+                        maxlength="255"
+                        required
+                        placeholder="Enter street address or prominent landmark">
+                </div>
+
+                <div class="form-group">
+                    <label for="location_type">Location Type</label>
+                    <select
+                        name="location_type"
+                        id="location_type"
+                        required>
+
+                        <option value="">
+                            Select location type
+                        </option>
+
+                        <option value="Hospital">
+                            🏥 Hospital
+                        </option>
+
+                        <option value="School">
+                            🏫 School
+                        </option>
+
+                        <option value="Highway">
+                            🛣 Highway
+                        </option>
+
+                        <option value="Market">
+                            🛒 Market
+                        </option>
+
+                        <option value="Residential Area">
+                            🏠 Residential Area
+                        </option>
+
+                        <option value="Public Area">
+                            🏙 Public Area
+                        </option>
+
+                        <option value="Open Plot">
+                            🌳 Open Plot
+                        </option>
+
+                        <option value="Other">
+                            📍 Other
+                        </option>
+
+                    </select>
+                </div>
+            </div>
+
+
+            <!-- SECTION 4: LOCATION DETECTION & COORDINATES -->
+            <div class="form-section">
+                <div class="section-title">
+                    🌐 4. Location Detection
+                </div>
+
+                <div class="form-group">
+                    <label>GPS Coordinates</label>
+                    <div class="location-box">
+                        <p>
+                            📍 Click below to automatically detect your current latitude and longitude for accurate duplicate detection.
+                        </p>
+
+                        <button
+                            type="button"
+                            class="btn btn-location"
+                            onclick="getLocation()">
+                            📍 Use My Current Location
+                        </button>
+
+                        <div
+                            id="locationStatus"
+                            class="location-status">
+                            Location not selected.
+                        </div>
+
+                        <div class="coordinates">
+                            <div>
+                                <label for="latitude">Latitude</label>
+                                <input
+                                    type="number"
+                                    name="latitude"
+                                    id="latitude"
+                                    step="any"
+                                    placeholder="Example: 17.3850">
+                            </div>
+
+                            <div>
+                                <label for="longitude">Longitude</label>
+                                <input
+                                    type="number"
+                                    name="longitude"
+                                    id="longitude"
+                                    step="any"
+                                    placeholder="Example: 78.4867">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- SUBMIT BUTTON -->
+            <button
+                type="submit"
+                class="btn btn-primary btn-full"
+                style="margin-top: 10px; padding: 14px;">
+                🚀 Submit Complaint
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const departmentMap = {
+    "1": "Sanitation Department",
+    "2": "Electrical Department",
+    "3": "Road & Transport Department",
+    "4": "Water Supply Department",
+    "5": "Sewerage & Drainage Department",
+    "6": "Parks & Horticulture Department",
+    "7": "Animal Welfare Department",
+    "8": "Traffic & Transport Department",
+    "9": "Building & Town Planning Department",
+    "10": "Environment Department",
+    "11": "Public Health Department",
+    "12": "Emergency & Disaster Management Department",
+    "13": "Public Works Department",
+    "14": "General Administration Department"
+};
+
+
+function updateDepartment() {
+
+    const category =
+        document.getElementById("category_id").value;
+
+    const department =
+        document.getElementById("department_preview");
+
+    if (departmentMap[category]) {
+        department.value = departmentMap[category];
+    } else {
+        department.value = "";
+    }
+}
+
+
+const description =
+    document.getElementById("description");
+
+const charCount =
+    document.getElementById("charCount");
+
+
+description.addEventListener("input", function() {
+
+    charCount.textContent = this.value.length;
+
+});
+
+
+function getLocation() {
+
+    const status =
+        document.getElementById("locationStatus");
+
+    if (!navigator.geolocation) {
+
+        status.textContent =
+            "Geolocation is not supported by this browser.";
+
+        return;
+    }
+
+    status.textContent =
+        "Getting your current location...";
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position) {
+
+            const latitude =
+                position.coords.latitude;
+
+            const longitude =
+                position.coords.longitude;
+
+            const accuracy =
+                position.coords.accuracy;
+
+            document.getElementById("latitude").value =
+                latitude.toFixed(6);
+
+            document.getElementById("longitude").value =
+                longitude.toFixed(6);
+
+            status.textContent =
+                "Location detected successfully. Approximate accuracy: "
+                + Math.round(accuracy)
+                + " meters.";
+
+        },
+
+        function(error) {
+
+            if (error.code === 1) {
+
+                status.textContent =
+                    "Location permission was denied. You can enter latitude and longitude manually.";
+
+            } else if (error.code === 2) {
+
+                status.textContent =
+                    "Unable to determine your location. Please enter coordinates manually.";
+
+            } else if (error.code === 3) {
+
+                status.textContent =
+                    "Location request timed out. Please try again or enter coordinates manually.";
+
+            } else {
+
+                status.textContent =
+                    "Unable to get location. Please enter coordinates manually.";
+
+            }
+
+        },
+
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        }
+
+    );
+
+}
+
+</script>
+
+<footer class="footer">
+    <p>
+        <strong>CivicConnect</strong> — Smart Public Grievance Tracking System
+    </p>
+</footer>
+
+</body>
+</html>

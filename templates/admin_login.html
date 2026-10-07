@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - CivicConnect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="brand-container">
+        <a href="{{ url_for('index') }}" class="logo">
+            🏛 Civic<span>Connect</span>
+        </a>
+        <span class="brand-tagline">Smart Public Grievance Tracking System</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('citizen_login') }}">Citizen Login</a>
+        <a href="{{ url_for('admin_login') }}" class="active">Admin Login</a>
+    </div>
+</nav>
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>🔐 Admin Login</h1>
+            <p class="auth-subtitle">Authorized personnel portal for managing public grievances.</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('admin_login') }}">
+            <div class="form-group">
+                <label for="username">Admin Username</label>
+                <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    required
+                    placeholder="Enter admin username">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    required
+                    placeholder="Enter admin password">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+                Login as Admin
+            </button>
+        </form>
+
+        <div class="auth-links">
+            <p>
+                <a href="{{ url_for('citizen_login') }}">Citizen Portal Login</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <p>
+        <strong>CivicConnect</strong> — Admin Management Dashboard
+    </p>
+</footer>
+
+</body>
+</html>

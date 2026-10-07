@@ -1,0 +1,75 @@
+description,category,location_type,duplicate_count,priority
+Large garbage pile outside hospital,Garbage,Near City Hospital,3,5
+Garbage dumped beside hospital entrance,Garbage,Near City Hospital,4,5
+Garbage blocking hospital gate,Garbage,Near City Hospital,5,5
+Overflowing garbage near hospital,Garbage,Near City Hospital,4,5
+Severe garbage accumulation near hospital,Garbage,Near City Hospital,3,5
+Garbage dumped near government school,Garbage,Near Government School,2,4
+Huge garbage pile near school entrance,Garbage,Near Government School,3,4
+Overflowing garbage near school,Garbage,Near Government School,3,4
+Garbage blocking school road,Garbage,Near Government School,2,4
+Garbage collection problem near school,Garbage,Near Government School,1,4
+Garbage dumped in public park,Garbage,Public Park,1,3
+Garbage in public playground,Garbage,Public Park,1,3
+Waste accumulation in public area,Garbage,Public Park,2,3
+Garbage bins overflowing in public park,Garbage,Public Park,2,3
+Garbage scattered around public area,Garbage,Public Park,0,3
+Small garbage pile in residential street,Garbage,Public Park,0,2
+Garbage collection delayed in public area,Garbage,Public Park,1,2
+Small amount of waste in public area,Garbage,Public Park,0,2
+Minor garbage problem in public area,Garbage,Public Park,0,2
+Small waste issue in local area,Garbage,Public Park,0,2
+Small garbage issue in open plot,Garbage,Open Plot,0,1
+Minor waste in isolated open area,Garbage,Open Plot,0,1
+Small amount of garbage in empty plot,Garbage,Open Plot,0,1
+Garbage in unused open land,Garbage,Open Plot,0,1
+Minor waste problem in isolated area,Garbage,Open Plot,0,1
+Dangerous pothole on major road,Road Damage,Main Road,3,5
+Large pothole causing accidents,Road Damage,Main Road,4,5
+Major road damage near hospital,Road Damage,Near City Hospital,3,5
+Road completely damaged near busy junction,Road Damage,Main Road,5,5
+Severe potholes on main road,Road Damage,Main Road,4,5
+Large pothole near school,Road Damage,Near Government School,2,4
+Damaged road near government school,Road Damage,Near Government School,2,4
+Multiple potholes near school,Road Damage,Near Government School,3,4
+Broken road surface near school,Road Damage,Near Government School,1,4
+Road damage near public area,Road Damage,Public Park,1,3
+Small pothole in public area,Road Damage,Public Park,0,3
+Minor road damage in public area,Road Damage,Public Park,1,3
+Small road crack in public area,Road Damage,Public Park,0,2
+Minor pothole in public area,Road Damage,Public Park,0,2
+Small road issue in open plot,Road Damage,Open Plot,0,1
+Minor road damage in isolated area,Road Damage,Open Plot,0,1
+Major water pipeline leakage near hospital,Water Leakage,Near City Hospital,3,5
+Severe water leakage near hospital,Water Leakage,Near City Hospital,4,5
+Water pipe burst near hospital,Water Leakage,Near City Hospital,5,5
+Large water leakage near school,Water Leakage,Near Government School,2,4
+Water pipeline problem near school,Water Leakage,Near Government School,1,4
+Water leakage in public area,Water Leakage,Public Park,1,3
+Small water leakage in public area,Water Leakage,Public Park,0,3
+Small water leakage in public area,Water Leakage,Public Park,0,2
+Minor water leakage in open plot,Water Leakage,Open Plot,0,1
+Street lights completely off on main road,Street Light,Main Road,3,5
+Major street light failure near hospital,Street Light,Near City Hospital,3,5
+Street light not working near school,Street Light,Near Government School,2,4
+Several street lights not working near school,Street Light,Near Government School,3,4
+Street light problem in public park,Street Light,Public Park,1,3
+Street light not working in public area,Street Light,Public Park,0,3
+Street light not working in public area,Street Light,Public Park,0,2
+Street light problem in open plot,Street Light,Open Plot,0,1
+Blocked drainage near hospital,Drainage,Near City Hospital,3,5
+Severe drainage blockage on main road,Drainage,Main Road,4,5
+Overflowing drain near school,Drainage,Near Government School,2,4
+Blocked drain near government school,Drainage,Near Government School,2,4
+Drainage problem in public area,Drainage,Public Park,1,3
+Minor drainage issue in public area,Drainage,Public Park,0,3
+Minor drainage issue in public area,Drainage,Public Park,0,2
+Small drainage issue in open plot,Drainage,Open Plot,0,1
+Major electricity problem near hospital,Electricity,Near City Hospital,3,5
+Power line problem on main road,Electricity,Main Road,3,5
+Electricity issue near school,Electricity,Near Government School,2,4
+Power supply problem near government school,Electricity,Near Government School,2,4
+Electricity problem in public area,Electricity,Public Park,1,3
+Minor electricity issue in public area,Electricity,Public Park,0,3
+Minor electricity issue in public area,Electricity,Public Park,0,2
+Small electricity issue in open plot,Electricity,Open Plot,0,1

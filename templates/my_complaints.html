@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Complaints - CivicConnect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="brand-container">
+        <a href="{{ url_for('index') }}" class="logo">
+            🏛 Civic<span>Connect</span>
+        </a>
+        <span class="brand-tagline">Smart Public Grievance Tracking System</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="{{ url_for('citizen_home') }}">Dashboard</a>
+        <a href="{{ url_for('complaint') }}">New Complaint</a>
+        <a href="{{ url_for('my_complaints') }}" class="active">My Complaints</a>
+        <a href="{{ url_for('citizen_logout') }}">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="dashboard-header">
+        <div>
+            <h1>📋 My Complaints</h1>
+            <p>Track priority, department assignment, duplicate counts, and real-time status of your grievances.</p>
+        </div>
+
+        <a href="{{ url_for('complaint') }}" class="btn btn-primary">
+            + New Complaint
+        </a>
+    </div>
+
+    {% if complaints %}
+        <div class="table-card">
+            <div class="table-header">
+                <h2>Your Complaint History</h2>
+                <p>All complaints registered from your account</p>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Department</th>
+                            <th>Location</th>
+                            <th>Priority</th>
+                            <th>Duplicates</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for complaint in complaints %}
+                        <tr>
+                            <td>
+                                <strong>#{{ complaint[0] }}</strong>
+                            </td>
+
+                            <td>
+                                <strong>{{ complaint[1] }}</strong>
+                            </td>
+
+                            <td style="max-width: 250px;">
+                                {{ complaint[2] }}
+                            </td>
+
+                            <td>
+                                {{ complaint[3] }}
+                            </td>
+
+                            <td>
+                                {{ complaint[4] }}
+                                {% if complaint[5] %}
+                                    <br>
+                                    <small style="color: var(--text-muted);">
+                                        📍 {{ complaint[5] }}
+                                    </small>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if complaint[6] >= 10 %}
+                                    <span class="badge badge-critical">
+                                        🔴 Critical ({{ complaint[6] }})
+                                    </span>
+                                {% elif complaint[6] >= 8 %}
+                                    <span class="badge badge-high">
+                                        🟠 High ({{ complaint[6] }})
+                                    </span>
+                                {% elif complaint[6] >= 5 %}
+                                    <span class="badge badge-medium">
+                                        🟡 Medium ({{ complaint[6] }})
+                                    </span>
+                                {% else %}
+                                    <span class="badge badge-low">
+                                        🟢 Low ({{ complaint[6] }})
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <td style="text-align: center;">
+                                <span class="badge badge-review">
+                                    {{ complaint[7] }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {% set status = complaint[8]|lower %}
+
+                                {% if status == 'pending' %}
+                                    <span class="badge badge-pending">
+                                        Pending
+                                    </span>
+                                {% elif status == 'under review' %}
+                                    <span class="badge badge-review">
+                                        Under Review
+                                    </span>
+                                {% elif status == 'assigned' %}
+                                    <span class="badge badge-assigned">
+                                        Assigned
+                                    </span>
+                                {% elif status == 'in progress' %}
+                                    <span class="badge badge-progress">
+                                        In Progress
+                                    </span>
+                                {% elif status == 'resolved' %}
+                                    <span class="badge badge-resolved">
+                                        Resolved
+                                    </span>
+                                {% else %}
+                                    <span class="badge">
+                                        {{ complaint[8] }}
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <td style="white-space: nowrap; font-size: 13px; color: var(--text-muted);">
+                                {{ complaint[9] }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    {% else %}
+
+        <div class="card empty-state">
+            <div class="empty-icon">📭</div>
+            <h2>No Complaints Yet</h2>
+            <p>You have not submitted any complaints through your account.</p>
+            <a href="{{ url_for('complaint') }}" class="btn btn-primary">
+                Register Your First Complaint
+            </a>
+        </div>
+
+    {% endif %}
+
+</div>
+
+<footer class="footer">
+    <p>
+        <strong>CivicConnect</strong> — Smart Public Grievance Tracking System
+    </p>
+</footer>
+
+</body>
+</html>

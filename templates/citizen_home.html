@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citizen Dashboard - CivicConnect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="brand-container">
+        <a href="{{ url_for('index') }}" class="logo">
+            🏛 Civic<span>Connect</span>
+        </a>
+        <span class="brand-tagline">Smart Public Grievance Tracking System</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="{{ url_for('citizen_home') }}" class="active">Dashboard</a>
+        <a href="{{ url_for('complaint') }}">Register Complaint</a>
+        <a href="{{ url_for('my_complaints') }}">My Complaints</a>
+        <a href="{{ url_for('citizen_logout') }}">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="welcome-card">
+        <h1>Welcome back, {{ session.get('citizen_name', 'Citizen') }} 👋</h1>
+        <p>Manage your civic complaints, report new issues, and track real-time resolution status.</p>
+    </div>
+
+    <div class="portal-grid">
+        <div class="portal-card">
+            <div>
+                <div class="feature-icon">📝</div>
+                <h3>Register Complaint</h3>
+                <p>
+                    Report a new civic problem with category, description, location details,
+                    and automatic geolocation detection.
+                </p>
+            </div>
+            <a href="{{ url_for('complaint') }}" class="btn btn-primary">
+                Register Complaint
+            </a>
+        </div>
+
+        <div class="portal-card">
+            <div>
+                <div class="feature-icon">📋</div>
+                <h3>My Complaints</h3>
+                <p>
+                    View complaints submitted from your account, track status updates, priority scores, and department assignments.
+                </p>
+            </div>
+            <a href="{{ url_for('my_complaints') }}" class="btn btn-primary">
+                View My Complaints
+            </a>
+        </div>
+
+        <div class="portal-card">
+            <div>
+                <div class="feature-icon">🏠</div>
+                <h3>Public Home</h3>
+                <p>
+                    Return to the CivicConnect public homepage to learn more about system features and workflows.
+                </p>
+            </div>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                Go to Home
+            </a>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <p>
+        <strong>CivicConnect</strong> — Smart Public Grievance Tracking System
+    </p>
+</footer>
+
+</body>
+</html>

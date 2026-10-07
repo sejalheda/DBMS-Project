@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicConnect - Smart Public Grievance Tracking System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="brand-container">
+        <a href="{{ url_for('index') }}" class="logo">
+            🏛 Civic<span>Connect</span>
+        </a>
+        <span class="brand-tagline">Smart Public Grievance Tracking System</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="{{ url_for('index') }}" class="active">Home</a>
+        <a href="{{ url_for('complaint') }}">Register Complaint</a>
+        <a href="{{ url_for('citizen_login') }}">Citizen Login</a>
+        <a href="{{ url_for('admin_login') }}">Admin Login</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-pill">🏛 Smart Civic Platform</div>
+
+        <h1>
+            Smart Public Grievance
+            <span>Tracking System</span>
+        </h1>
+
+        <div class="hero-tagline-sub">Report. Track. Resolve.</div>
+
+        <p>
+            Citizens can easily submit public complaints, track resolution progress in real-time,
+            and help local authorities detect duplicate issues and resolve grievances efficiently.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="{{ url_for('complaint') }}" class="btn btn-primary">
+                📝 Register a Complaint
+            </a>
+
+            <a href="{{ url_for('citizen_login') }}" class="btn btn-secondary">
+                👤 Citizen Login
+            </a>
+
+            <a href="{{ url_for('admin_login') }}" class="btn btn-outline-hero">
+                🔐 Admin Login
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="section-header">
+        <h2>Why CivicConnect?</h2>
+        <p>Empowering citizens and local authorities with intelligent grievance resolution</p>
+    </div>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon-badge">📍</div>
+            <h3>Location-Based Complaints</h3>
+            <p>
+                Citizens can provide their current location using browser
+                geolocation or enter coordinates manually.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon-badge">🔎</div>
+            <h3>Duplicate Detection</h3>
+            <p>
+                Similar complaints from nearby locations are automatically grouped
+                to avoid repeated issue entries.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon-badge">🤖</div>
+            <h3>AI Priority Prediction</h3>
+            <p>
+                A machine learning model predicts complaint priority
+                using complaint information and severity.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon-badge">🏢</div>
+            <h3>Automatic Department Assignment</h3>
+            <p>
+                Complaints are automatically mapped to the responsible
+                civic department based on category.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon-badge">📊</div>
+            <h3>Admin Dashboard</h3>
+            <p>
+                Administrators can view consolidated issues, priorities,
+                locations and update complaint status.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon-badge">📱</div>
+            <h3>Complaint Tracking</h3>
+            <p>
+                Citizens can log in and view the real-time status of their own
+                submitted complaints.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="container">
+    <div class="steps-container">
+        <div class="section-header" style="margin-bottom: 20px;">
+            <h2>How CivicConnect Works</h2>
+            <p>A simple 5-step process from report to resolution</p>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Register</h3>
+                <p>Citizen submits a complaint issue with details.</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Locate</h3>
+                <p>Complaint location coordinates are captured.</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Analyze</h3>
+                <p>Duplicate and priority analysis is performed.</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Assign</h3>
+                <p>Complaint is mapped to responsible department.</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">5</div>
+                <h3>Track</h3>
+                <p>Citizen and admin track resolution progress.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <p>
+        <strong>CivicConnect</strong> — Smart Public Grievance Tracking System
+    </p>
+    <p>DBMS Project | Flask | PostgreSQL | Machine Learning</p>
+</footer>
+
+</body>
+</html>

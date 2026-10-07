@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CivicConnect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="brand-container">
+        <a href="{{ url_for('index') }}" class="logo">
+            🏛 Civic<span>Connect</span>
+        </a>
+        <span class="brand-tagline">Smart Public Grievance Tracking System</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="{{ url_for('admin_dashboard') }}" class="active">Dashboard</a>
+        <a href="{{ url_for('admin_logout') }}">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="dashboard-header">
+        <div>
+            <h1>📊 Admin Control Dashboard</h1>
+            <p>Monitor, prioritize, assign, and resolve consolidated civic grievance issues.</p>
+        </div>
+
+        <a href="{{ url_for('admin_logout') }}" class="btn btn-danger">
+            🚪 Logout
+        </a>
+    </div>
+
+    <!-- STATISTICS GRID -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Issues</div>
+            <div class="stat-number">{{ total_complaints }}</div>
+        </div>
+
+        <div class="stat-card" style="border-top: 3px solid var(--danger);">
+            <div class="stat-label">Critical Issues</div>
+            <div class="stat-number" style="color: var(--danger);">{{ critical_count }}</div>
+        </div>
+
+        <div class="stat-card" style="border-top: 3px solid var(--warning);">
+            <div class="stat-label">Pending</div>
+            <div class="stat-number" style="color: var(--warning);">{{ pending_count }}</div>
+        </div>
+
+        <div class="stat-card" style="border-top: 3px solid var(--success);">
+            <div class="stat-label">Resolved</div>
+            <div class="stat-number" style="color: var(--success);">{{ resolved_count }}</div>
+        </div>
+    </div>
+
+    <!-- COMPLAINT MANAGEMENT TABLE -->
+    {% if complaints %}
+        <div class="table-card">
+            <div class="table-header">
+                <h2>Consolidated Grievance Issues</h2>
+                <p>Nearby duplicate complaints are automatically grouped into single actionable issue entries.</p>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Citizen Details</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Location</th>
+                            <th>Department</th>
+                            <th>Priority</th>
+                            <th>Duplicates</th>
+                            <th>Status</th>
+                            <th>Coordinates</th>
+                            <th>Update Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for complaint in complaints %}
+                        <tr>
+                            <td>
+                                <strong>#{{ complaint[0] }}</strong>
+                            </td>
+
+                            <td>
+                                <strong>{{ complaint[1] }}</strong>
+                                {% if complaint[2] %}
+                                    <br>
+                                    <small style="color: var(--text-muted);">
+                                        ✉️ {{ complaint[2] }}
+                                    </small>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <strong>{{ complaint[3] }}</strong>
+                            </td>
+
+                            <td style="max-width: 260px;">
+                                {{ complaint[4] }}
+                            </td>
+
+                            <td>
+                                {{ complaint[5] }}
+                                {% if complaint[6] %}
+                                    <br>
+                                    <small style="color: var(--text-muted);">
+                                        📍 {{ complaint[6] }}
+                                    </small>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <span style="font-weight: 600; color: var(--secondary);">
+                                    {{ complaint[7] }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {% if complaint[8] >= 10 %}
+                                    <span class="badge badge-critical">
+                                        🔴 Critical ({{ complaint[8] }})
+                                    </span>
+                                {% elif complaint[8] >= 8 %}
+                                    <span class="badge badge-high">
+                                        🟠 High ({{ complaint[8] }})
+                                    </span>
+                                {% elif complaint[8] >= 5 %}
+                                    <span class="badge badge-medium">
+                                        🟡 Medium ({{ complaint[8] }})
+                                    </span>
+                                {% else %}
+                                    <span class="badge badge-low">
+                                        🟢 Low ({{ complaint[8] }})
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <td style="text-align: center;">
+                                <span class="badge badge-review">
+                                    {{ complaint[9] }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {% set status = complaint[10]|lower %}
+
+                                {% if status == 'pending' %}
+                                    <span class="badge badge-pending">
+                                        Pending
+                                    </span>
+                                {% elif status == 'under review' %}
+                                    <span class="badge badge-review">
+                                        Under Review
+                                    </span>
+                                {% elif status == 'assigned' %}
+                                    <span class="badge badge-assigned">
+                                        Assigned
+                                    </span>
+                                {% elif status == 'in progress' %}
+                                    <span class="badge badge-progress">
+                                        In Progress
+                                    </span>
+                                {% elif status == 'resolved' %}
+                                    <span class="badge badge-resolved">
+                                        Resolved
+                                    </span>
+                                {% else %}
+                                    <span class="badge">
+                                        {{ complaint[10] }}
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <td style="font-size: 13px; font-family: monospace; color: var(--text-muted);">
+                                {% if complaint[12] is not none and complaint[13] is not none %}
+                                    Lat: {{ "%.6f"|format(complaint[12]|float) }}<br>
+                                    Lon: {{ "%.6f"|format(complaint[13]|float) }}
+                                {% else %}
+                                    <span style="color: var(--text-light);">Not available</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <form
+                                    method="POST"
+                                    action="{{ url_for('update_status') }}"
+                                    class="status-form">
+
+                                    <input
+                                        type="hidden"
+                                        name="complaint_id"
+                                        value="{{ complaint[0] }}">
+
+                                    <select name="status_id">
+                                        {% for status in statuses %}
+                                            <option
+                                                value="{{ status[0] }}"
+                                                {% if status[1] == complaint[10] %}
+                                                    selected
+                                                {% endif %}>
+                                                {{ status[1] }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary btn-sm">
+                                        Update
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    {% else %}
+
+        <div class="card empty-state">
+            <div class="empty-icon">📭</div>
+            <h2>No Complaints Available</h2>
+            <p>There are currently no complaint issues to display.</p>
+        </div>
+
+    {% endif %}
+
+</div>
+
+<footer class="footer">
+    <p>
+        <strong>CivicConnect</strong> — Admin Management Dashboard
+    </p>
+</footer>
+
+</body>
+</html>
